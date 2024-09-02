@@ -522,6 +522,14 @@
 				Returns [code]true[/code] if this string represents a well-formatted IPv4 or IPv6 address. This method considers [url=https://en.wikipedia.org/wiki/Reserved_IP_addresses]reserved IP addresses[/url] such as [code]"0.0.0.0"[/code] and [code]"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"[/code] as valid.
 			</description>
 		</method>
+		<method name="is_whitespace" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns true if the string is formed only of 0 or more whitespace characters.
+
+				The list of whitespace characters can be found [url=https://en.wikipedia.org/wiki/Whitespace_character]here[/url] (only Is_Whitespace is considered).
+			</description>
+		</method>
 		<method name="join" qualifiers="const">
 			<return type="String" />
 			<param index="0" name="parts" type="PackedStringArray" />
