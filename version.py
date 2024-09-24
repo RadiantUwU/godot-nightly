@@ -4,6 +4,6 @@ major = 4
 minor = 3
 patch = 1
 status = "rc"
-module_config = ".radiant_fork"
+module_config = ".radiant_fork.transpride<33"
 website = "https://godotengine.org"
 docs = "4.3"
