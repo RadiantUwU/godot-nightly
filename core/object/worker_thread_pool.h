@@ -88,6 +88,7 @@ private:
 		bool low_priority = false;
 		BaseTemplateUserdata *template_userdata = nullptr;
 		int pool_thread_index = -1;
+		bool auto_complete = false;
 
 		void free_template_userdata();
 		Task() :
@@ -213,7 +214,7 @@ public:
 	}
 	TaskID add_native_task(void (*p_func)(void *), void *p_userdata, bool p_high_priority = false, const String &p_description = String());
 	TaskID add_task(const Callable &p_action, bool p_high_priority = false, const String &p_description = String());
-
+	bool auto_clear_task(TaskID p_task_id);
 	bool is_task_completed(TaskID p_task_id) const;
 	Error wait_for_task_completion(TaskID p_task_id);
 

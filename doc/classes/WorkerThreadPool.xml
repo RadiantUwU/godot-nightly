@@ -72,6 +72,13 @@
 				[b]Warning:[/b] Every task must be waited for completion using [method wait_for_task_completion] or [method wait_for_group_task_completion] at some point so that any allocated resources inside the task can be cleaned up.
 			</description>
 		</method>
+		<method name="auto_clear_task">
+			<return type="bool" />
+			<param index="0" name="task_id" type="int" />
+			<description>
+				If the task specified by task_id is already completed, clears it's resources, if not it sets a flag on the task which marks it to clear itself once the task completes.
+			</description>
+		</method>
 		<method name="get_group_processed_element_count" qualifiers="const">
 			<return type="int" />
 			<param index="0" name="group_id" type="int" />

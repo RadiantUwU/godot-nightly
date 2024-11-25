@@ -158,8 +158,11 @@ void WorkerThreadPool::_process_task(Task *p_task) {
 				threads[i].signaled = true;
 			}
 		}
+		if (p_task->auto_complete && p_task->completed && p_task->waiting_pool == 0 && p_task->waiting_user == 0) {
+			tasks.erase(p_task->self);
+			task_allocator.free(p_task);
+		}
 	}
-
 #ifdef THREADS_ENABLED
 	{
 		curr_thread.current_task = prev_task;
@@ -345,6 +348,24 @@ WorkerThreadPool::TaskID WorkerThreadPool::_add_task(const Callable &p_callable,
 
 WorkerThreadPool::TaskID WorkerThreadPool::add_task(const Callable &p_action, bool p_high_priority, const String &p_description) {
 	return _add_task(p_action, nullptr, nullptr, nullptr, p_high_priority, p_description);
+}
+
+bool WorkerThreadPool::auto_clear_task(TaskID p_task_id) {
+	MutexLock task_lock(task_mutex);
+	Task **taskp = tasks.getptr(p_task_id);
+	if (!taskp) {
+		ERR_FAIL_V_MSG(false, "Invalid Task ID"); // Invalid task
+	}
+	Task *task = *taskp;
+	if (task->completed) {
+		if (task->waiting_pool == 0 && task->waiting_user == 0) {
+			tasks.erase(p_task_id);
+			task_allocator.free(task);
+		}
+		return true;
+	}
+	task->auto_complete = true;
+	return task->auto_complete;
 }
 
 bool WorkerThreadPool::is_task_completed(TaskID p_task_id) const {
@@ -757,6 +778,7 @@ void WorkerThreadPool::finish() {
 
 void WorkerThreadPool::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_task", "action", "high_priority", "description"), &WorkerThreadPool::add_task, DEFVAL(false), DEFVAL(String()));
+	ClassDB::bind_method(D_METHOD("auto_clear_task", "task_id"), &WorkerThreadPool::auto_clear_task);
 	ClassDB::bind_method(D_METHOD("is_task_completed", "task_id"), &WorkerThreadPool::is_task_completed);
 	ClassDB::bind_method(D_METHOD("wait_for_task_completion", "task_id"), &WorkerThreadPool::wait_for_task_completion);
 
