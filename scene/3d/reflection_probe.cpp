@@ -274,7 +274,7 @@ void ReflectionProbe::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "update_mode", PROPERTY_HINT_ENUM, "Once when Changed (Average),Always (Slow),Static (Fast)"), "set_update_mode", "get_update_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "update_slicing", PROPERTY_HINT_ENUM, "Automatic,1 Face per Frame (Faster but More Latency),2 Faces per Frame,3 Faces per Frame,6 Faces per Frame (Slower but Less Latency)"), "set_update_slicing", "get_update_slicing");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "filter_mode", PROPERTY_HINT_ENUM, "Automatic,High-Quality Incremental,Real-Time"), "set_filter_mode", "get_filter_mode");
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "intensity", PROPERTY_HINT_RANGE, "0,1,0.01"), "set_intensity", "get_intensity");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "intensity", PROPERTY_HINT_RANGE, "0,16,0.01"), "set_intensity", "get_intensity");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_distance", PROPERTY_HINT_RANGE, "0,16384,0.1,or_greater,exp,suffix:m"), "set_max_distance", "get_max_distance");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "size", PROPERTY_HINT_NONE, "suffix:m"), "set_size", "get_size");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "origin_offset", PROPERTY_HINT_NONE, "suffix:m"), "set_origin_offset", "get_origin_offset");
