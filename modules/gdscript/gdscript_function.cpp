@@ -260,6 +260,61 @@ void GDScriptFunctionState::_clear_stack() {
 	}
 }
 
+bool GDScriptFunctionState::_mt_disconnect(const StringName &p_signal, const Callable &p_callable, bool p_force) {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	return Object::_disconnect(p_signal, p_callable, p_force);
+}
+
+Error GDScriptFunctionState::emit_signalp(const StringName &p_name, const Variant **p_args, int p_argcount) {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	return Object::emit_signalp(p_name, p_args, p_argcount);
+}
+
+bool GDScriptFunctionState::has_signal(const StringName &p_name) const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	return Object::has_signal(p_name);
+}
+
+void GDScriptFunctionState::get_signal_list(List<MethodInfo> *p_signals) const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	Object::get_signal_list(p_signals);
+}
+
+void GDScriptFunctionState::get_signal_connection_list(const StringName &p_signal, List<Connection> *p_connections) const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	Object::get_signal_connection_list(p_signal, p_connections);
+}
+
+void GDScriptFunctionState::get_all_signal_connections(List<Connection> *p_connections) const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	Object::get_all_signal_connections(p_connections);
+}
+
+int GDScriptFunctionState::get_persistent_signal_connection_count() const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	return Object::get_persistent_signal_connection_count();
+}
+
+void GDScriptFunctionState::get_signals_connected_to_this(List<Connection> *p_connections) const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	Object::get_signals_connected_to_this(p_connections);
+}
+
+Error GDScriptFunctionState::connect(const StringName &p_signal, const Callable &p_callable, uint32_t p_flags) {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	return Object::connect(p_signal, p_callable, p_flags);
+}
+
+void GDScriptFunctionState::disconnect(const StringName &p_signal, const Callable &p_callable) {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	Object::disconnect(p_signal, p_callable);
+}
+
+bool GDScriptFunctionState::is_connected(const StringName &p_signal, const Callable &p_callable) const {
+	MutexLock lock(first_state.is_valid() ? first_state->mutex : mutex);
+	return Object::is_connected(p_signal, p_callable);
+}
+
 void GDScriptFunctionState::_clear_connections() {
 	List<Object::Connection> conns;
 	get_signals_connected_to_this(&conns);

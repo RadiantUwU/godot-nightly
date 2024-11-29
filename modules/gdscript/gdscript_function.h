@@ -36,6 +36,7 @@
 #include "core/object/ref_counted.h"
 #include "core/object/script_language.h"
 #include "core/os/thread.h"
+//#include "core/os/mutex.h"
 #include "core/string/string_name.h"
 #include "core/templates/pair.h"
 #include "core/templates/self_list.h"
@@ -612,10 +613,26 @@ class GDScriptFunctionState : public RefCounted {
 	SelfList<GDScriptFunctionState> scripts_list;
 	SelfList<GDScriptFunctionState> instances_list;
 
+	Mutex mutex;
+
 protected:
 	static void _bind_methods();
 
+	virtual bool _mt_disconnect(const StringName &p_signal, const Callable &p_callable, bool p_force = false) override;
+
 public:
+	virtual Error emit_signalp(const StringName &p_name, const Variant **p_args, int p_argcount) override;
+	virtual bool has_signal(const StringName &p_name) const override;
+	virtual void get_signal_list(List<MethodInfo> *p_signals) const override;
+	virtual void get_signal_connection_list(const StringName &p_signal, List<Connection> *p_connections) const override;
+	virtual void get_all_signal_connections(List<Connection> *p_connections) const override;
+	virtual int get_persistent_signal_connection_count() const override;
+	virtual void get_signals_connected_to_this(List<Connection> *p_connections) const override;
+
+	virtual Error connect(const StringName &p_signal, const Callable &p_callable, uint32_t p_flags = 0) override;
+	virtual void disconnect(const StringName &p_signal, const Callable &p_callable) override;
+	virtual bool is_connected(const StringName &p_signal, const Callable &p_callable) const override;
+
 	bool is_valid(bool p_extended_check = false) const;
 	Variant resume(const Variant &p_arg = Variant());
 
