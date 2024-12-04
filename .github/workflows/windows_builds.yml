@@ -43,13 +43,25 @@ jobs:
           - name: Template (target=template_release)
             cache-name: windows-template
             target: template_release
-            tests: true
-            sconsflags: debug_symbols=no tests=yes
-            bin: "./bin/godot.windows.template_release.x86_64.console.exe"
+            tests: false
+            sconsflags: debug_symbols=no
 
           - name: Template (target=template_debug)
             cache-name: windows-template-debug
             target: template_debug
+            tests: false
+
+          - name: Template w/ Mono (target=template_release)
+            cache-name: windows-template-mono
+            target: template_release
+            tests: true
+            sconsflags: debug_symbols=no tests=yes vsproj=yes vsproj_gen_only=no windows_subsystem=console module_mono_enabled=yes
+            bin: "./bin/godot.windows.template_release.x86_64.mono.exe"
+
+          - name: Template w/ Mono (target=template_debug)
+            cache-name: windows-template-mono-debug
+            target: template_debug
+            sconsflags: debug_symbols=no vsproj=yes vsproj_gen_only=no windows_subsystem=console module_mono_enabled=yes
             tests: false
 
     steps:
